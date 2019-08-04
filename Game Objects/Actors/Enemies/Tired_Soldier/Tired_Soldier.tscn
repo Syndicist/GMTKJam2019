@@ -1,0 +1,191 @@
+[gd_scene load_steps=15 format=2]
+
+[ext_resource path="res://Game Objects/Actors/Enemies/Enemy.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Assets/Enemies/Tired Soldier/Tired Soldier.png" type="Texture" id=2]
+[ext_resource path="res://Game Objects/Actors/Enemies/Tired_Soldier/Enemy_Default_State.gd" type="Script" id=3]
+[ext_resource path="res://Game Objects/Actors/Enemies/Tired_Soldier/Enemy_Chase_State.gd" type="Script" id=4]
+[ext_resource path="res://Game Objects/Actors/Enemies/Enemy_Hurt_State.gd" type="Script" id=5]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 4, 8 )
+
+[sub_resource type="Animation" id=2]
+resource_name = "attack1"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 14, 15, 16 ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "death"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 8, 9, 10 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("HitBox/CollisionShape2D:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "fall"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 6 ]
+}
+
+[sub_resource type="Animation" id=5]
+resource_name = "hurt"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 7 ]
+}
+
+[sub_resource type="Animation" id=6]
+resource_name = "idle"
+length = 1.4
+loop = true
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.35, 0.7, 1.05 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3 ]
+}
+
+[sub_resource type="Animation" id=7]
+resource_name = "ready"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 11 ]
+}
+
+[sub_resource type="Animation" id=8]
+resource_name = "ready_move"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 12, 13 ]
+}
+
+[sub_resource type="Animation" id=9]
+resource_name = "walk"
+length = 0.4
+loop = true
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 4, 5 ]
+}
+
+[node name="Enemy" instance=ExtResource( 1 )]
+max_hp = 100
+base_damage = 20
+mspd = 25.0
+tag = "Enemy"
+
+[node name="Physics_Collider" parent="." index="0"]
+shape = SubResource( 1 )
+
+[node name="animator" parent="." index="1"]
+anims/attack1 = SubResource( 2 )
+anims/death = SubResource( 3 )
+anims/fall = SubResource( 4 )
+anims/hurt = SubResource( 5 )
+anims/idle = SubResource( 6 )
+anims/ready = SubResource( 7 )
+anims/ready_move = SubResource( 8 )
+anims/walk = SubResource( 9 )
+
+[node name="Sprite" parent="." index="2"]
+texture = ExtResource( 2 )
+hframes = 17
+frame = 5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox" index="0"]
+shape = SubResource( 1 )
+
+[node name="States" type="Node2D" parent="." index="6"]
+
+[node name="Default" type="Node2D" parent="States" index="0"]
+script = ExtResource( 3 )
+
+[node name="Chase" type="Node2D" parent="States" index="1"]
+script = ExtResource( 4 )
+
+[node name="Attack" type="Node2D" parent="States" index="2"]
+
+[node name="Hurt" type="Node2D" parent="States" index="3"]
+script = ExtResource( 5 )
+
+[node name="Damage_Timer" type="Timer" parent="States/Hurt" index="0"]
+[connection signal="timeout" from="States/Hurt/Damage_Timer" to="States/Hurt" method="_on_Damage_Timer_timeout"]

@@ -1,0 +1,454 @@
+[gd_scene load_steps=24 format=2]
+
+[ext_resource path="res://Game Objects/Actors/Player/Player.gd" type="Script" id=1]
+[ext_resource path="res://Assets/Player/player.png" type="Texture" id=2]
+[ext_resource path="res://Game Objects/Actors/Player/AttackParticles.gd" type="Script" id=3]
+[ext_resource path="res://Game Objects/Actors/Player/attack_hitbox.gd" type="Script" id=4]
+[ext_resource path="res://Game Objects/Actors/Player/Hitbox.gd" type="Script" id=5]
+[ext_resource path="res://Game Objects/Actors/Player/Camera2D.gd" type="Script" id=6]
+[ext_resource path="res://Game Objects/Actors/Player/States/Idle.gd" type="Script" id=7]
+[ext_resource path="res://Game Objects/Actors/Player/States/Ledge_Grab.gd" type="Script" id=8]
+[ext_resource path="res://Game Objects/Actors/Player/States/Dash.gd" type="Script" id=9]
+[ext_resource path="res://Game Objects/Actors/Player/States/Hurt.gd" type="Script" id=10]
+[ext_resource path="res://Game Objects/Actors/Player/Scarf.gd" type="Script" id=11]
+
+[sub_resource type="Animation" id=1]
+resource_name = "attack"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprites/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 2 ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath("Sprites/AttackParticles")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "instance_particle"
+} ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "dash"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprites/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 1 ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [ 300.0 ],
+"method": "add_velocity"
+} ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath("Movement_States/Dash/dashTimer")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [ 0.2 ],
+"method": "start"
+} ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Hitbox:iframe")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
+tracks/4/type = "method"
+tracks/4/path = NodePath("Movement_States/Dash/iTimer")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [ 0.5 ],
+"method": "start"
+} ]
+}
+tracks/5/type = "method"
+tracks/5/path = NodePath("Movement_States/Dash/ledgeTimer")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [ 0.05 ],
+"method": "start"
+} ]
+}
+
+[sub_resource type="Animation" id=9]
+resource_name = "death"
+tracks/0/type = "method"
+tracks/0/path = NodePath("../AnimationPlayer")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0.5 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "deadend"
+} ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprites/Sprite:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 6 ]
+}
+
+[sub_resource type="Animation" id=10]
+resource_name = "fall"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprites/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 4 ]
+}
+
+[sub_resource type="Animation" id=11]
+resource_name = "hurt"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprites/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 5 ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "idle"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprites/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 0 ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "ledge_grab"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprites/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 3 ]
+}
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 5, 8 )
+
+[sub_resource type="Shader" id=12]
+code = "  
+shader_type canvas_item;
+render_mode unshaded;
+ 
+uniform float width : hint_range(0.0, 1.0);
+uniform vec4 outline_color : hint_color;
+ 
+void fragment()
+{
+    vec2 size = vec2(width) / vec2(textureSize(TEXTURE, 0));
+   
+    vec4 sprite_color = texture(TEXTURE, UV);
+   
+    float alpha = sprite_color.a;
+    alpha += texture(TEXTURE, UV + vec2(0.0, -size.y)).a;
+    alpha += texture(TEXTURE, UV + vec2(size.x, -size.y)).a;
+    alpha += texture(TEXTURE, UV + vec2(size.x, 0.0)).a;
+    alpha += texture(TEXTURE, UV + vec2(size.x, size.y)).a;
+    alpha += texture(TEXTURE, UV + vec2(0.0, size.y)).a;
+    alpha += texture(TEXTURE, UV + vec2(-size.x, size.y)).a;
+    alpha += texture(TEXTURE, UV + vec2(-size.x, 0.0)).a;
+    alpha += texture(TEXTURE, UV + vec2(-size.x, -size.y)).a;
+   
+    vec3 final_color = mix(outline_color.rgb, sprite_color.rgb, sprite_color.a);
+    COLOR = vec4(final_color, clamp(alpha, 0.0, 1.0));
+}"
+
+[sub_resource type="ShaderMaterial" id=13]
+shader = SubResource( 12 )
+shader_param/width = 0.0
+shader_param/outline_color = Color( 1, 1, 1, 1 )
+
+[sub_resource type="RectangleShape2D" id=6]
+extents = Vector2( 3, 6 )
+
+[sub_resource type="RectangleShape2D" id=8]
+extents = Vector2( 256, 150 )
+
+[node name="Player" type="KinematicBody2D"]
+collision_layer = 2
+script = ExtResource( 1 )
+max_hp = 100
+base_damage = 100
+gravity = 20.0
+stam_recov = 2.0
+
+[node name="anim" type="AnimationPlayer" parent="."]
+anims/attack = SubResource( 1 )
+anims/dash = SubResource( 2 )
+anims/death = SubResource( 9 )
+anims/fall = SubResource( 10 )
+anims/hurt = SubResource( 11 )
+anims/idle = SubResource( 3 )
+anims/ledge_grab = SubResource( 4 )
+
+[node name="PhysicsCollider" type="CollisionShape2D" parent="."]
+shape = SubResource( 5 )
+
+[node name="Sprites" type="Node2D" parent="."]
+
+[node name="Sprite" type="Sprite" parent="Sprites"]
+material = SubResource( 13 )
+texture = ExtResource( 2 )
+hframes = 7
+
+[node name="AttackParticles" type="Node2D" parent="Sprites"]
+script = ExtResource( 3 )
+
+[node name="particleZTimer" type="Timer" parent="Sprites/AttackParticles"]
+wait_time = 0.05
+one_shot = true
+
+[node name="particleTimer" type="Timer" parent="Sprites/AttackParticles"]
+one_shot = true
+
+[node name="hitbox" type="Area2D" parent="Sprites/AttackParticles"]
+visible = false
+collision_layer = 4
+collision_mask = 24
+script = ExtResource( 4 )
+knockback = 50.0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Sprites/AttackParticles/hitbox"]
+polygon = PoolVector2Array( -15, -7, 30, -5, 37, -2, 37, 2, 30, 5, -15, 7, -35, 0 )
+disabled = true
+
+[node name="Position2D" type="Position2D" parent="Sprites"]
+position = Vector2( 0, -3 )
+
+[node name="Hitbox" type="Area2D" parent="."]
+editor/display_folded = true
+collision_layer = 2
+collision_mask = 24
+script = ExtResource( 5 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource( 6 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+pause_mode = 2
+editor/display_folded = true
+zoom = Vector2( 0.5, 0.5 )
+script = ExtResource( 6 )
+
+[node name="StopTimer" type="Timer" parent="Camera2D"]
+pause_mode = 2
+one_shot = true
+
+[node name="Movement_States" type="Node2D" parent="."]
+
+[node name="Idle" type="Node2D" parent="Movement_States"]
+script = ExtResource( 7 )
+
+[node name="Ledge_Grab" type="Node2D" parent="Movement_States"]
+script = ExtResource( 8 )
+
+[node name="Dash" type="Node2D" parent="Movement_States"]
+editor/display_folded = true
+script = ExtResource( 9 )
+
+[node name="ledgeTimer" type="Timer" parent="Movement_States/Dash"]
+one_shot = true
+
+[node name="iTimer" type="Timer" parent="Movement_States/Dash"]
+wait_time = 0.6
+one_shot = true
+
+[node name="dashTimer" type="Timer" parent="Movement_States/Dash"]
+
+[node name="Hurt" type="Node2D" parent="Movement_States"]
+script = ExtResource( 10 )
+
+[node name="ledge_cast_right" type="RayCast2D" parent="."]
+enabled = true
+cast_to = Vector2( 6, 0 )
+
+[node name="ledge_cast_left" type="RayCast2D" parent="."]
+position = Vector2( 0, 0.0769463 )
+enabled = true
+cast_to = Vector2( -6, 0 )
+
+[node name="DetectHitboxArea" type="Area2D" parent="."]
+editor/display_folded = true
+visible = false
+collision_layer = 0
+collision_mask = 1024
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectHitboxArea"]
+shape = SubResource( 8 )
+
+[node name="RayCastCollision" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 1025
+
+[node name="stamTimer" type="Timer" parent="."]
+wait_time = 0.2
+autostart = true
+
+[node name="Line2D" type="Line2D" parent="."]
+editor/display_folded = true
+z_index = -2
+width = 1.0
+default_color = Color( 0, 0, 0, 1 )
+script = ExtResource( 11 )
+targetPath = NodePath("../Sprites/Position2D")
+length = 15
+
+[node name="WindxTimer" type="Timer" parent="Line2D"]
+wait_time = 0.1
+autostart = true
+
+[node name="WindxaTimer" type="Timer" parent="Line2D"]
+wait_time = 0.1
+autostart = true
+
+[node name="WindxbTimer" type="Timer" parent="Line2D"]
+wait_time = 0.1
+autostart = true
+
+[node name="WindyaTimer" type="Timer" parent="Line2D"]
+wait_time = 0.1
+autostart = true
+
+[node name="WindybTimer" type="Timer" parent="Line2D"]
+wait_time = 0.1
+autostart = true
+
+[node name="Line2D2" type="Line2D" parent="."]
+editor/display_folded = true
+z_index = -2
+width = 1.0
+default_color = Color( 0, 0, 0, 1 )
+script = ExtResource( 11 )
+targetPath = NodePath("../Sprites/Position2D")
+length = 25
+
+[node name="WindxTimer" type="Timer" parent="Line2D2"]
+wait_time = 0.1
+autostart = true
+
+[node name="WindxaTimer" type="Timer" parent="Line2D2"]
+wait_time = 0.1
+autostart = true
+
+[node name="WindxbTimer" type="Timer" parent="Line2D2"]
+wait_time = 0.1
+autostart = true
+
+[node name="WindyaTimer" type="Timer" parent="Line2D2"]
+wait_time = 0.1
+autostart = true
+
+[node name="WindybTimer" type="Timer" parent="Line2D2"]
+wait_time = 0.1
+autostart = true
+[connection signal="timeout" from="Sprites/AttackParticles/particleZTimer" to="Sprites/AttackParticles" method="_on_particleZTimer_timeout"]
+[connection signal="timeout" from="Sprites/AttackParticles/particleTimer" to="Sprites/AttackParticles" method="_on_particleTimer_timeout"]
+[connection signal="area_entered" from="Hitbox" to="Hitbox" method="_on_Hitbox_area_entered"]
+[connection signal="timeout" from="Camera2D/StopTimer" to="Camera2D" method="_on_StopTimer_timeout"]
+[connection signal="timeout" from="Movement_States/Dash/ledgeTimer" to="Movement_States/Dash" method="_on_ledgeTimer_timeout"]
+[connection signal="timeout" from="Movement_States/Dash/iTimer" to="Movement_States/Dash" method="_on_iTimer_timeout"]
+[connection signal="timeout" from="Movement_States/Dash/dashTimer" to="Movement_States/Dash" method="_on_dashTimer_timeout"]
+[connection signal="area_entered" from="DetectHitboxArea" to="." method="_on_DetectHitboxArea_area_entered"]
+[connection signal="area_exited" from="DetectHitboxArea" to="." method="_on_DetectHitboxArea_area_exited"]
+[connection signal="timeout" from="stamTimer" to="." method="_on_stamTimer_timeout"]
+[connection signal="timeout" from="Line2D/WindxTimer" to="Line2D" method="_on_WindxTimer_timeout"]
+[connection signal="timeout" from="Line2D/WindxaTimer" to="Line2D" method="_on_WindxaTimer_timeout"]
+[connection signal="timeout" from="Line2D/WindxbTimer" to="Line2D" method="_on_WindxbTimer_timeout"]
+[connection signal="timeout" from="Line2D/WindyaTimer" to="Line2D" method="_on_WindyaTimer_timeout"]
+[connection signal="timeout" from="Line2D/WindybTimer" to="Line2D" method="_on_WindybTimer_timeout"]
+[connection signal="timeout" from="Line2D2/WindxTimer" to="Line2D2" method="_on_WindxTimer_timeout"]
+[connection signal="timeout" from="Line2D2/WindxaTimer" to="Line2D2" method="_on_WindxaTimer_timeout"]
+[connection signal="timeout" from="Line2D2/WindxbTimer" to="Line2D2" method="_on_WindxbTimer_timeout"]
+[connection signal="timeout" from="Line2D2/WindyaTimer" to="Line2D2" method="_on_WindyaTimer_timeout"]
+[connection signal="timeout" from="Line2D2/WindybTimer" to="Line2D2" method="_on_WindybTimer_timeout"]
